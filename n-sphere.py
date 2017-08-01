@@ -17,11 +17,16 @@ def Multiply(pf1, pf2):
 def Reduce(pf):
     n = pf.num
     d = pf.den
-    for i in range(2, int(min(n, d)) + 1):
-        while (n % i == 0 and d % i == 0):
-            n = n / i
-            d = d / i
+    gcd = GCD(n, d)
+    n = n / gcd
+    d = d / gcd
     return PiFraction(int(n), pf.pi, int(d))
+    
+def GCD(a, b):
+  if(b == 0):
+    return a
+  else:
+    return GCD(b, a % b)
 
 # F(n) = definite integral of cos(x)^n dx from -pi/2 to pi/2
 def F(n):
@@ -70,19 +75,21 @@ def printFormula(dc, dimension):
         print(dc.den)
     print()
     
-def printVolume(dimension):
-    printFormula(dimensionalConstant(dimension), dimension)
+def printVolume(dimC, dim):
+    printFormula(dimC, dim)
 
-def printSurfaceArea(dimension):
-    dimC = Reduce(Multiply(PiFraction(dimension, 0, 1), dimensionalConstant(dimension)))
-    printFormula(dimC, dimension - 1)
+def printSurfaceArea(dimC, dim):
+    dimC = Reduce(Multiply(PiFraction(dim, 0, 1), dimC))
+    printFormula(dimC, dim - 1)
 
-for d in range (1, 10):
-    num = str(d) + "-sphere"
-    print(num)
-    print()
-    print("Volume:")
-    printVolume(d)
-    print("Surface Area:")
-    printSurfaceArea(d)
-    print()
+for d in range (1, 20):
+    if (d >= 1):
+      dimC = dimensionalConstant(d)
+      num = str(d) + "-sphere"
+      print(num)
+      print()
+      print("Volume:")
+      printVolume(dimC, d)
+      print("Surface Area:")
+      printSurfaceArea(dimC, d)
+      print()
